@@ -65,7 +65,7 @@ export function QuickActions() {
       className="bg-card rounded-xl border border-border shadow-lg p-6"
     >
       <h2 className="text-lg font-semibold mb-4">Quick Actions</h2>
-      <div className="grid grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 gap-3">
         {quickActions.map((action, index) => (
           <motion.div
             key={action.label}
@@ -76,10 +76,10 @@ export function QuickActions() {
             <Link href={action.href}>
               <Button
                 variant="outline"
-                className={`w-full h-auto flex flex-col items-center gap-2 p-4 ${action.color} border-transparent`}
+                className={`w-full h-auto flex flex-col items-center justify-center gap-2 p-4 min-h-[88px] ${action.color} border-transparent`}
               >
-                <action.icon className="w-5 h-5" />
-                <span className="text-xs font-medium">{action.label}</span>
+                <action.icon className="w-5 h-5 flex-shrink-0" />
+                <span className="text-xs font-medium text-center leading-tight">{action.label}</span>
               </Button>
             </Link>
           </motion.div>

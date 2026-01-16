@@ -42,9 +42,13 @@ export function CountdownSection() {
   ]
 
   return (
-    <section className="py-20 relative overflow-hidden">
+    <section className="py-20 relative overflow-hidden bg-background">
       {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-accent/5" />
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-10 left-10 w-40 h-40 bg-primary/5 rounded-full blur-2xl" />
+        <div className="absolute bottom-10 right-10 w-40 h-40 bg-accent/5 rounded-full blur-2xl" />
+      </div>
       <div className="absolute inset-0">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
         <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-accent/10 rounded-full blur-3xl" />

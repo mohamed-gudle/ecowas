@@ -119,7 +119,7 @@ export default function ProjectTrackerPage() {
     <div className="min-h-screen">
       <Header title="Project Tracker" subtitle="Track operational projects and task progress" />
 
-      <div className="p-6 space-y-6">
+      <div className="p-6 space-y-6 max-w-[1600px] mx-auto">
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {[
@@ -345,6 +345,16 @@ export default function ProjectTrackerPage() {
           </div>
         )}
       </div>
+    </div>
+
+      </div>
+
+    </div>
+
+
+      </div>
+
+
     </div>
   )
 }

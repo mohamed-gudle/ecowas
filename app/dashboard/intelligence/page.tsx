@@ -139,7 +139,7 @@ export default function IntelligenceDashboardPage() {
     <div className="min-h-screen">
       <Header title="Summit Intelligence" subtitle="Executive Dashboard - Real-time operational intelligence" />
 
-      <div className="p-6 space-y-6">
+      <div className="p-6 space-y-6 max-w-[1600px] mx-auto">
         {/* AI Status Bar */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}

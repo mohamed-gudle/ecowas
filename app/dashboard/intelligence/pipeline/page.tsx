@@ -79,7 +79,8 @@ export default function InvestmentPipelinePage() {
   const conversionRate = "23%"
 
   return (
-    <div className="space-y-6">
+    <div className="min-h-screen">
+      <div className="p-6 space-y-6 max-w-[1600px] mx-auto">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
@@ -258,6 +259,7 @@ export default function InvestmentPipelinePage() {
           </div>
         </CardContent>
       </Card>
+      </div>
     </div>
   )
 }

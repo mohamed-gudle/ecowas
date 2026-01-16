@@ -86,7 +86,7 @@ export default function BadgeManagementPage() {
     <div className="min-h-screen">
       <Header title="Badge Management" subtitle="Issue and manage attendee badges" />
 
-      <div className="p-6 space-y-6">
+      <div className="p-6 space-y-6 max-w-[1600px] mx-auto">
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {[
@@ -344,6 +344,10 @@ export default function BadgeManagementPage() {
           )}
         </DialogContent>
       </Dialog>
+    </div>
+
+      </div>
+
     </div>
   )
 }

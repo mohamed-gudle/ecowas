@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(for file in app/dashboard/{analytics,commitments,knowledge,media,risks,settings,vip}/page.tsx)",
+      "Bash(do:*)",
+      "Bash(echo:*)"
+    ]
+  }
+}

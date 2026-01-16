@@ -35,8 +35,12 @@ const featuredSpeakers = [
 
 export function SpeakersPreview() {
   return (
-    <section className="py-24 relative overflow-hidden">
+    <section className="py-24 relative overflow-hidden bg-background">
       <div className="absolute inset-0 bg-gradient-to-b from-muted/30 to-background" />
+      <div className="absolute inset-0">
+        <div className="absolute top-20 right-1/4 w-64 h-64 bg-primary/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-20 left-1/4 w-64 h-64 bg-accent/5 rounded-full blur-3xl" />
+      </div>
 
       <div className="container mx-auto px-4 relative z-10">
         <motion.div

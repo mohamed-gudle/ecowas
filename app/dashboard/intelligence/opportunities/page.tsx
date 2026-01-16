@@ -133,7 +133,7 @@ export default function OpportunityMappingPage() {
     <div className="min-h-screen">
       <Header title="Opportunity Mapping" subtitle="AI-powered investment opportunity discovery and matching" />
 
-      <div className="p-6 space-y-6">
+      <div className="p-6 space-y-6 max-w-[1600px] mx-auto">
         {/* AI Summary Bar */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -414,6 +414,16 @@ export default function OpportunityMappingPage() {
           </div>
         </div>
       </div>
+    </div>
+
+      </div>
+
+    </div>
+
+
+      </div>
+
+
     </div>
   )
 }
