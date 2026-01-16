@@ -1,0 +1,16 @@
+"use client"
+
+import dynamic from "next/dynamic"
+
+const MeetingsContent = dynamic(() => import("./meetings-content"), {
+  ssr: false,
+  loading: () => (
+    <div className="flex items-center justify-center min-h-[60vh]">
+      <div className="animate-spin rounded-full h-8 w-8 border-2 border-primary border-t-transparent" />
+    </div>
+  ),
+})
+
+export default function MeetingsLoader() {
+  return <MeetingsContent />
+}
