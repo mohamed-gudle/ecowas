@@ -483,8 +483,5 @@ export default function SuppliersPage() {
       </div>
     </div>
 
-      </div>
-
-    </div>
   )
 }

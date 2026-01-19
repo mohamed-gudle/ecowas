@@ -345,9 +345,5 @@ export default function BadgeManagementPage() {
         </DialogContent>
       </Dialog>
     </div>
-
-      </div>
-
-    </div>
   )
 }

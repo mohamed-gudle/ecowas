@@ -418,15 +418,5 @@ export default function OpportunityMappingPage() {
         </div>
       </div>
     </div>
-
-      </div>
-
-    </div>
-
-
-      </div>
-
-
-    </div>
   )
 }

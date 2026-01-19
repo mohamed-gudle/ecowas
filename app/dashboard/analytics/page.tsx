@@ -56,8 +56,7 @@ const topCountries = [
 ]
 
 export default function AnalyticsPage() {
-  return (
-    <div className="min-h-screen">
+  return <div className="min-h-screen">
       <div className="p-6 space-y-6 max-w-[1600px] mx-auto">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -199,5 +198,4 @@ export default function AnalyticsPage() {
     </div>
     </div>
   </div>
-  )
-}
+

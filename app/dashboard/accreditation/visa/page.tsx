@@ -158,9 +158,6 @@ export default function VisaProcessingPage() {
         </CardContent>
       </Card>
     </div>
-
-      </div>
-
     </div>
   )
 }
