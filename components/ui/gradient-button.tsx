@@ -1,7 +1,6 @@
 "use client"
 
 import type * as React from "react"
-import { motion } from "framer-motion"
 import { cn } from "@/lib/utils"
 import { Loader2 } from "lucide-react"
 
@@ -40,9 +39,7 @@ export function GradientButton({
   }
 
   return (
-    <motion.button
-      whileHover={{ scale: disabled ? 1 : 1.02 }}
-      whileTap={{ scale: disabled ? 1 : 0.98 }}
+    <button
       className={cn(
         "relative inline-flex items-center justify-center gap-2 rounded-lg font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed animate-gradient bg-[length:200%_200%]",
         variants[variant],
@@ -55,6 +52,6 @@ export function GradientButton({
       {loading && <Loader2 className="w-4 h-4 animate-spin" />}
       {!loading && icon}
       {children}
-    </motion.button>
+    </button>
   )
 }
