@@ -29,7 +29,8 @@ export default function ReadinessPage() {
   const overallProgress = Math.round(categories.reduce((sum, c) => sum + c.progress, 0) / categories.length)
 
   return (
-    <div className="space-y-6">
+    <div className="min-h-screen">
+      <div className="p-6 space-y-6 max-w-[1600px] mx-auto">
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold">Readiness Checklist</h1>
@@ -111,6 +112,10 @@ export default function ReadinessPage() {
           </motion.div>
         ))}
       </div>
+    </div>
+
+      </div>
+
     </div>
   )
 }

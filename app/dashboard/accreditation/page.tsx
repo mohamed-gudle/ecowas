@@ -230,7 +230,7 @@ export default function AccreditationPage() {
     <div className="min-h-screen">
       <Header title="Accreditation Command Center" subtitle="Manage and process all accreditation applications" />
 
-      <div className="p-6 space-y-6">
+      <div className="p-6 space-y-6 max-w-[1600px] mx-auto">
         {/* Stats Row */}
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
           {[

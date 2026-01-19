@@ -579,7 +579,7 @@ export default function CountryDetailPage({ params }: { params: Promise<{ id: st
         </motion.div>
       </div>
 
-      <div className="container mx-auto px-6 py-8">
+      <div className="p-6 space-y-6 max-w-[1600px] mx-auto">
         {/* Quick Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 -mt-16 relative z-10 mb-8">
           {[

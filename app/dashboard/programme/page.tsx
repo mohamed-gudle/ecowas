@@ -263,7 +263,8 @@ export default function ProgrammePage() {
   const dates = ["2024-03-15", "2024-03-16", "2024-03-17", "2024-03-18"]
 
   return (
-    <div className="space-y-6">
+    <div className="min-h-screen">
+      <div className="p-6 space-y-6 max-w-[1600px] mx-auto">
       {/* Page Header */}
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
@@ -457,6 +458,7 @@ export default function ProgrammePage() {
 
       {/* Session Detail Dialog */}
       <SessionDetailDialog session={showSessionDetail} onClose={() => setShowSessionDetail(null)} />
+      </div>
     </div>
   )
 }

@@ -20,7 +20,8 @@ export default function SettingsPage() {
   const [twoFactor, setTwoFactor] = useState(false)
 
   return (
-    <div className="space-y-6">
+    <div className="min-h-screen">
+      <div className="p-6 space-y-6 max-w-[1600px] mx-auto">
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold">Settings</h1>
@@ -284,5 +285,7 @@ export default function SettingsPage() {
         </TabsContent>
       </Tabs>
     </div>
+    </div>
+  </div>
   )
 }

@@ -13,7 +13,7 @@ export default function DashboardPage() {
     <div className="min-h-screen">
       <Header title="Command Center" subtitle="ECOWAS Climate Summit 2026" />
 
-      <div className="p-6 space-y-6">
+      <div className="p-6 space-y-6 max-w-[1600px] mx-auto">
         {/* Stats Grid */}
         <OverviewStats />
 

@@ -163,7 +163,7 @@ export default function SuppliersPage() {
     <div className="min-h-screen">
       <Header title="Suppliers & Contracts" subtitle="Manage supplier relationships and track deliverables" />
 
-      <div className="p-6 space-y-6">
+      <div className="p-6 space-y-6 max-w-[1600px] mx-auto">
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {stats.map((stat, index) => (
@@ -481,6 +481,10 @@ export default function SuppliersPage() {
           })}
         </div>
       </div>
+    </div>
+
+      </div>
+
     </div>
   )
 }
