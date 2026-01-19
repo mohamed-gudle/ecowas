@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { motion } from "framer-motion"
+import Link from "next/link"
 import { Header } from "@/components/dashboard/header"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -330,9 +331,11 @@ export default function OpportunityMappingPage() {
                         </div>
                       </div>
                       <div className="flex justify-end">
-                        <Button size="sm" variant="ghost" className="gap-1">
-                          Details <ChevronRight className="w-4 h-4" />
-                        </Button>
+                        <Link href={`/dashboard/intelligence/opportunities/${opp.id}`}>
+                          <Button size="sm" variant="ghost" className="gap-1">
+                            Details <ChevronRight className="w-4 h-4" />
+                          </Button>
+                        </Link>
                       </div>
                     </div>
 
