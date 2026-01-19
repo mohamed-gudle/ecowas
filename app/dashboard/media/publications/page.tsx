@@ -120,6 +120,6 @@ export default function PublicationsPage() {
 
       </div>
 
-    </div>
+
   )
 }

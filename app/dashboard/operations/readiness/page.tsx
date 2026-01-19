@@ -115,7 +115,5 @@ export default function ReadinessPage() {
     </div>
 
       </div>
-
-    </div>
   )
 }

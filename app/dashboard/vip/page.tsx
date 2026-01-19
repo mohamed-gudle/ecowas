@@ -378,6 +378,6 @@ export default function VIPProtocolPage() {
       </Tabs>
     </div>
     </div>
-  </div>
+
   )
 }

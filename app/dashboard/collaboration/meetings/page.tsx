@@ -565,7 +565,5 @@ export default function MeetingsPage() {
     </div>
 
       </div>
-
-    </div>
   )
 }

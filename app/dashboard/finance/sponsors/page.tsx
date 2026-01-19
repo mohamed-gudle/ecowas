@@ -177,6 +177,6 @@ export default function SponsorsPage() {
 
       </div>
 
-    </div>
+
   )
 }

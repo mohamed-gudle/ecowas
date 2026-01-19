@@ -322,6 +322,6 @@ export default function RisksIncidentsPage() {
       </Tabs>
     </div>
     </div>
-  </div>
+
   )
 }

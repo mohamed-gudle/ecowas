@@ -165,7 +165,5 @@ export default function SpeakersPage() {
     </div>
 
       </div>
-
-    </div>
   )
 }

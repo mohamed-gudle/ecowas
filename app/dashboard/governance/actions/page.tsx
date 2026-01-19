@@ -167,6 +167,6 @@ export default function ActionRegisterPage() {
 
       </div>
 
-    </div>
+
   )
 }

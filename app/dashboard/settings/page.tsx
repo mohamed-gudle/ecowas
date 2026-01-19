@@ -286,6 +286,6 @@ export default function SettingsPage() {
       </Tabs>
     </div>
     </div>
-  </div>
+
   )
 }

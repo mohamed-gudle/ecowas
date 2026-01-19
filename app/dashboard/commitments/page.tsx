@@ -239,6 +239,6 @@ export default function CommitmentsPage() {
       </Card>
     </div>
     </div>
-  </div>
+
   )
 }

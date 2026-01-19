@@ -81,6 +81,6 @@ export default function CompactsPage() {
 
       </div>
 
-    </div>
+
   )
 }

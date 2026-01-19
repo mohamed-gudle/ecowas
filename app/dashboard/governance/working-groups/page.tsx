@@ -112,6 +112,6 @@ export default function WorkingGroupsPage() {
 
       </div>
 
-    </div>
+ 
   )
 }

@@ -152,7 +152,5 @@ export default function SideEventsPage() {
     </div>
 
       </div>
-
-    </div>
   )
 }

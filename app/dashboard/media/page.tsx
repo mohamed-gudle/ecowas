@@ -166,6 +166,6 @@ export default function MediaCenterPage() {
       </Card>
     </div>
     </div>
-  </div>
+
   )
 }

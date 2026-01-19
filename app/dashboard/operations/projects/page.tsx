@@ -346,15 +346,5 @@ export default function ProjectTrackerPage() {
         )}
       </div>
     </div>
-
-      </div>
-
-    </div>
-
-
-      </div>
-
-
-    </div>
   )
 }

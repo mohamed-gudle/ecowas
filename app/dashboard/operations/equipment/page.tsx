@@ -150,6 +150,5 @@ export default function EquipmentPage() {
 
       </div>
 
-    </div>
   )
 }

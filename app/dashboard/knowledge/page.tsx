@@ -111,6 +111,6 @@ export default function KnowledgeHubPage() {
       </Card>
     </div>
     </div>
-  </div>
+
   )
 }

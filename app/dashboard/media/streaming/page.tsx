@@ -160,6 +160,5 @@ export default function StreamingControlPage() {
 
       </div>
 
-    </div>
   )
 }
