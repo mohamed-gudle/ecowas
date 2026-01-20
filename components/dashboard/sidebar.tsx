@@ -73,6 +73,7 @@ const navItems = [
       { title: "Email Client", href: "/dashboard/collaboration/email" },
       { title: "Meetings & Standups", href: "/dashboard/collaboration/meetings" },
       { title: "Team Chat", href: "/dashboard/collaboration/chat" },
+      { title: "Project Management", href: "/dashboard/collaboration/projects" },
       { title: "Recordings Library", href: "/dashboard/collaboration/recordings" },
     ],
   },
@@ -98,6 +99,7 @@ const navItems = [
       { title: "Run of Show", href: "/dashboard/programme/run-of-show" },
       { title: "Side Events", href: "/dashboard/programme/side-events" },
       { title: "Speakers", href: "/dashboard/programme/speakers" },
+      { title: "AI Scheduler", href: "/dashboard/programme/agent", badge: "AI" },
     ],
   },
   {
@@ -266,7 +268,7 @@ export function Sidebar({ collapsed = false, onCollapse }: SidebarProps) {
                     "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent",
                     isActive(item.href) && "bg-sidebar-accent text-sidebar-foreground",
                     item.title === "Summit Intelligence" &&
-                      "bg-gradient-to-r from-primary/10 to-accent/10 border border-primary/20",
+                    "bg-gradient-to-r from-primary/10 to-accent/10 border border-primary/20",
                   )}
                 >
                   <item.icon

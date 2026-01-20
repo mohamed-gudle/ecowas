@@ -28,6 +28,7 @@ import {
   Eye,
   Sparkles,
 } from "lucide-react"
+import { SchedulingAgentChat } from "@/components/scheduling/scheduling-agent-chat"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
@@ -53,192 +54,15 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { cn } from "@/lib/utils"
 
-type SessionStatus = "draft" | "confirmed" | "in-progress" | "completed" | "cancelled"
-type SessionType = "plenary" | "panel" | "workshop" | "bilateral" | "networking" | "ceremony"
-
-interface Session {
-  id: string
-  title: string
-  type: SessionType
-  status: SessionStatus
-  date: string
-  startTime: string
-  endTime: string
-  venue: string
-  room: string
-  capacity: number
-  registered: number
-  speakers: { id: string; name: string; role: string; avatar: string }[]
-  description: string
-  track: string
-  isLive: boolean
-  hasInterpretation: boolean
-  languages: string[]
-}
-
-const sessions: Session[] = [
-  {
-    id: "1",
-    title: "Opening Ceremony: Climate Action for Africa's Future",
-    type: "ceremony",
-    status: "confirmed",
-    date: "2024-03-15",
-    startTime: "09:00",
-    endTime: "10:30",
-    venue: "Main Convention Center",
-    room: "Grand Ballroom",
-    capacity: 2000,
-    registered: 1856,
-    speakers: [
-      { id: "s1", name: "H.E. Bola Tinubu", role: "ECOWAS Chairman", avatar: "/african-leader-portrait.jpg" },
-      {
-        id: "s2",
-        name: "Dr. Amina Mohammed",
-        role: "UN Deputy Secretary-General",
-        avatar: "/placeholder-w932o.png",
-      },
-    ],
-    description: "Official opening of the ECOWAS Climate Summit with addresses from regional leaders.",
-    track: "Main Stage",
-    isLive: false,
-    hasInterpretation: true,
-    languages: ["English", "French", "Portuguese"],
-  },
-  {
-    id: "2",
-    title: "Renewable Energy Transition in West Africa",
-    type: "panel",
-    status: "confirmed",
-    date: "2024-03-15",
-    startTime: "11:00",
-    endTime: "12:30",
-    venue: "Main Convention Center",
-    room: "Hall A",
-    capacity: 500,
-    registered: 423,
-    speakers: [
-      { id: "s3", name: "Prof. Fatima Diallo", role: "Energy Policy Expert", avatar: "/african-woman-professor.jpg" },
-      { id: "s4", name: "Mr. Kwame Asante", role: "Solar Africa CEO", avatar: "/african-businessman.png" },
-    ],
-    description:
-      "Expert panel discussing strategies for accelerating renewable energy adoption across ECOWAS member states.",
-    track: "Energy & Infrastructure",
-    isLive: false,
-    hasInterpretation: true,
-    languages: ["English", "French"],
-  },
-  {
-    id: "3",
-    title: "Green Finance Workshop: Accessing Climate Funds",
-    type: "workshop",
-    status: "draft",
-    date: "2024-03-15",
-    startTime: "14:00",
-    endTime: "16:00",
-    venue: "Main Convention Center",
-    room: "Workshop Room 1",
-    capacity: 100,
-    registered: 67,
-    speakers: [
-      {
-        id: "s5",
-        name: "Ms. Aisha Bello",
-        role: "AfDB Climate Finance Director",
-        avatar: "/african-woman-finance.jpg",
-      },
-    ],
-    description:
-      "Hands-on workshop on navigating climate finance mechanisms and preparing successful funding proposals.",
-    track: "Finance & Investment",
-    isLive: false,
-    hasInterpretation: false,
-    languages: ["English"],
-  },
-  {
-    id: "4",
-    title: "Presidential Bilateral: Nigeria-Ghana Climate Partnership",
-    type: "bilateral",
-    status: "confirmed",
-    date: "2024-03-15",
-    startTime: "15:00",
-    endTime: "16:00",
-    venue: "VIP Wing",
-    room: "State Room 1",
-    capacity: 20,
-    registered: 12,
-    speakers: [],
-    description: "High-level bilateral meeting between Nigerian and Ghanaian delegations on joint climate initiatives.",
-    track: "VIP Protocol",
-    isLive: false,
-    hasInterpretation: true,
-    languages: ["English"],
-  },
-  {
-    id: "5",
-    title: "Youth Climate Action Summit",
-    type: "plenary",
-    status: "in-progress",
-    date: "2024-03-16",
-    startTime: "09:00",
-    endTime: "12:00",
-    venue: "Youth Center",
-    room: "Main Hall",
-    capacity: 800,
-    registered: 756,
-    speakers: [{ id: "s6", name: "Vanessa Nakate", role: "Climate Activist", avatar: "/young-african-woman-activist.jpg" }],
-    description: "Youth-led plenary focusing on the role of young Africans in driving climate action.",
-    track: "Youth & Education",
-    isLive: true,
-    hasInterpretation: true,
-    languages: ["English", "French", "Portuguese", "Arabic"],
-  },
-  {
-    id: "6",
-    title: "Networking Lunch: Private Sector Leaders",
-    type: "networking",
-    status: "confirmed",
-    date: "2024-03-16",
-    startTime: "12:30",
-    endTime: "14:00",
-    venue: "Main Convention Center",
-    room: "Executive Dining",
-    capacity: 150,
-    registered: 142,
-    speakers: [],
-    description: "Exclusive networking opportunity for private sector delegates and potential investors.",
-    track: "Business & Investment",
-    isLive: false,
-    hasInterpretation: false,
-    languages: ["English"],
-  },
-]
-
-const tracks = [
-  "All Tracks",
-  "Main Stage",
-  "Energy & Infrastructure",
-  "Finance & Investment",
-  "Youth & Education",
-  "Business & Investment",
-  "VIP Protocol",
-]
-
-const sessionTypes: { value: SessionType; label: string; color: string }[] = [
-  { value: "plenary", label: "Plenary", color: "bg-primary" },
-  { value: "panel", label: "Panel Discussion", color: "bg-accent" },
-  { value: "workshop", label: "Workshop", color: "bg-chart-1" },
-  { value: "bilateral", label: "Bilateral Meeting", color: "bg-chart-2" },
-  { value: "networking", label: "Networking", color: "bg-chart-3" },
-  { value: "ceremony", label: "Ceremony", color: "bg-chart-4" },
-]
-
-const statusConfig: Record<SessionStatus, { label: string; color: string; icon: React.ElementType }> = {
-  draft: { label: "Draft", color: "bg-muted text-muted-foreground", icon: FileText },
-  confirmed: { label: "Confirmed", color: "bg-emerald-500/10 text-emerald-600", icon: CheckCircle2 },
-  "in-progress": { label: "Live Now", color: "bg-red-500/10 text-red-600 animate-pulse", icon: Video },
-  completed: { label: "Completed", color: "bg-slate-500/10 text-slate-600", icon: CheckCircle2 },
-  cancelled: { label: "Cancelled", color: "bg-red-500/10 text-red-600", icon: XCircle },
-}
+import {
+  sessions,
+  tracks,
+  sessionTypes,
+  statusConfig,
+  type Session,
+  type SessionType,
+  type SessionStatus,
+} from "@/lib/programme-data"
 
 export default function ProgrammePage() {
   const [view, setView] = useState<"grid" | "list" | "timeline">("grid")
@@ -265,200 +89,203 @@ export default function ProgrammePage() {
   return (
     <div className="min-h-screen">
       <div className="p-6 space-y-6 max-w-[1600px] mx-auto">
-      {/* Page Header */}
-      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">Programme Management</h1>
-          <p className="text-muted-foreground">Create, manage, and monitor all summit sessions</p>
-        </div>
-        <div className="flex items-center gap-2">
-          <Button variant="outline" className="gap-2 bg-transparent">
-            <Download className="h-4 w-4" />
-            Export
-          </Button>
-          <Button variant="outline" className="gap-2 bg-transparent">
-            <Upload className="h-4 w-4" />
-            Import
-          </Button>
-          <Button
-            onClick={() => setShowCreateDialog(true)}
-            className="gap-2 bg-gradient-to-r from-primary to-accent hover:opacity-90"
-          >
-            <Plus className="h-4 w-4" />
-            Create Session
-          </Button>
-        </div>
-      </div>
-
-      {/* Stats Row */}
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-        {[
-          { label: "Total Sessions", value: "48", change: "+3 today" },
-          { label: "Confirmed", value: "42", change: "87.5%" },
-          { label: "Live Now", value: "2", change: "In progress" },
-          { label: "Speakers", value: "156", change: "89% confirmed" },
-        ].map((stat, i) => (
-          <motion.div
-            key={stat.label}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.1 }}
-            className="rounded-xl border bg-card p-4"
-          >
-            <p className="text-sm text-muted-foreground">{stat.label}</p>
-            <p className="text-2xl font-bold">{stat.value}</p>
-            <p className="text-xs text-muted-foreground">{stat.change}</p>
-          </motion.div>
-        ))}
-      </div>
-
-      {/* Date Tabs */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-2">
-        {dates.map((date) => {
-          const d = new Date(date)
-          const isSelected = date === selectedDate
-          return (
-            <button
-              key={date}
-              onClick={() => setSelectedDate(date)}
-              className={cn(
-                "flex flex-col items-center rounded-xl border px-6 py-3 transition-all",
-                isSelected ? "border-primary bg-primary/10 text-primary" : "border-border hover:border-primary/50",
-              )}
-            >
-              <span className="text-xs font-medium uppercase">
-                {d.toLocaleDateString("en-US", { weekday: "short" })}
-              </span>
-              <span className="text-2xl font-bold">{d.getDate()}</span>
-              <span className="text-xs text-muted-foreground">{d.toLocaleDateString("en-US", { month: "short" })}</span>
-            </button>
-          )
-        })}
-      </div>
-
-      {/* Filters & View Toggle */}
-      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-        <div className="flex flex-1 items-center gap-2">
-          <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            <Input
-              placeholder="Search sessions..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10"
-            />
+        {/* Page Header */}
+        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight">Programme Management</h1>
+            <p className="text-muted-foreground">Create, manage, and monitor all summit sessions</p>
           </div>
-          <Select value={selectedTrack} onValueChange={setSelectedTrack}>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Select track" />
-            </SelectTrigger>
-            <SelectContent>
-              {tracks.map((track) => (
-                <SelectItem key={track} value={track}>
-                  {track}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Select value={selectedType} onValueChange={setSelectedType}>
-            <SelectTrigger className="w-[160px]">
-              <SelectValue placeholder="Session type" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Types</SelectItem>
-              {sessionTypes.map((type) => (
-                <SelectItem key={type.value} value={type.value}>
-                  {type.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="flex items-center gap-1 rounded-lg border p-1">
-          {[
-            { value: "grid", icon: Grid3X3 },
-            { value: "list", icon: List },
-            { value: "timeline", icon: Calendar },
-          ].map((v) => (
-            <button
-              key={v.value}
-              onClick={() => setView(v.value as typeof view)}
-              className={cn(
-                "rounded-md p-2 transition-colors",
-                view === v.value ? "bg-primary text-primary-foreground" : "hover:bg-muted",
-              )}
+          <div className="flex items-center gap-2">
+            <Button variant="outline" className="gap-2 bg-transparent">
+              <Download className="h-4 w-4" />
+              Export
+            </Button>
+            <Button variant="outline" className="gap-2 bg-transparent">
+              <Upload className="h-4 w-4" />
+              Import
+            </Button>
+            <Button
+              onClick={() => setShowCreateDialog(true)}
+              className="gap-2 bg-gradient-to-r from-primary to-accent hover:opacity-90"
             >
-              <v.icon className="h-4 w-4" />
-            </button>
+              <Plus className="h-4 w-4" />
+              Create Session
+            </Button>
+          </div>
+        </div>
+
+        {/* Stats Row */}
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+          {[
+            { label: "Total Sessions", value: "48", change: "+3 today" },
+            { label: "Confirmed", value: "42", change: "87.5%" },
+            { label: "Live Now", value: "2", change: "In progress" },
+            { label: "Speakers", value: "156", change: "89% confirmed" },
+          ].map((stat, i) => (
+            <motion.div
+              key={stat.label}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.1 }}
+              className="rounded-xl border bg-card p-4"
+            >
+              <p className="text-sm text-muted-foreground">{stat.label}</p>
+              <p className="text-2xl font-bold">{stat.value}</p>
+              <p className="text-xs text-muted-foreground">{stat.change}</p>
+            </motion.div>
           ))}
         </div>
-      </div>
 
-      {/* Sessions Display */}
-      <AnimatePresence mode="wait">
-        {view === "grid" && (
-          <motion.div
-            key="grid"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="grid gap-4 md:grid-cols-2 lg:grid-cols-3"
-          >
-            {filteredSessions.map((session, i) => (
-              <SessionCard key={session.id} session={session} index={i} onClick={() => setShowSessionDetail(session)} />
-            ))}
-          </motion.div>
-        )}
-
-        {view === "list" && (
-          <motion.div
-            key="list"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="space-y-2"
-          >
-            {filteredSessions.map((session, i) => (
-              <SessionListItem
-                key={session.id}
-                session={session}
-                index={i}
-                onClick={() => setShowSessionDetail(session)}
-              />
-            ))}
-          </motion.div>
-        )}
-
-        {view === "timeline" && (
-          <motion.div key="timeline" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-            <TimelineView sessions={filteredSessions} onSessionClick={setShowSessionDetail} />
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {filteredSessions.length === 0 && (
-        <div className="flex flex-col items-center justify-center rounded-xl border border-dashed py-16">
-          <Calendar className="h-12 w-12 text-muted-foreground/50" />
-          <h3 className="mt-4 text-lg font-semibold">No sessions found</h3>
-          <p className="text-muted-foreground">Try adjusting your filters or create a new session.</p>
-          <Button onClick={() => setShowCreateDialog(true)} className="mt-4 gap-2">
-            <Plus className="h-4 w-4" />
-            Create Session
-          </Button>
+        {/* Date Tabs */}
+        <div className="flex items-center gap-2 overflow-x-auto pb-2">
+          {dates.map((date) => {
+            const d = new Date(date)
+            const isSelected = date === selectedDate
+            return (
+              <button
+                key={date}
+                onClick={() => setSelectedDate(date)}
+                className={cn(
+                  "flex flex-col items-center rounded-xl border px-6 py-3 transition-all",
+                  isSelected ? "border-primary bg-primary/10 text-primary" : "border-border hover:border-primary/50",
+                )}
+              >
+                <span className="text-xs font-medium uppercase">
+                  {d.toLocaleDateString("en-US", { weekday: "short" })}
+                </span>
+                <span className="text-2xl font-bold">{d.getDate()}</span>
+                <span className="text-xs text-muted-foreground">{d.toLocaleDateString("en-US", { month: "short" })}</span>
+              </button>
+            )
+          })}
         </div>
-      )}
 
-      {/* Create Session Dialog */}
-      <CreateSessionDialog
-        open={showCreateDialog}
-        onOpenChange={setShowCreateDialog}
-        step={createStep}
-        setStep={setCreateStep}
-      />
+        {/* Filters & View Toggle */}
+        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div className="flex flex-1 items-center gap-2">
+            <div className="relative flex-1 max-w-md">
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                placeholder="Search sessions..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10"
+              />
+            </div>
+            <Select value={selectedTrack} onValueChange={setSelectedTrack}>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Select track" />
+              </SelectTrigger>
+              <SelectContent>
+                {tracks.map((track) => (
+                  <SelectItem key={track} value={track}>
+                    {track}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Select value={selectedType} onValueChange={setSelectedType}>
+              <SelectTrigger className="w-[160px]">
+                <SelectValue placeholder="Session type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Types</SelectItem>
+                {sessionTypes.map((type) => (
+                  <SelectItem key={type.value} value={type.value}>
+                    {type.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="flex items-center gap-1 rounded-lg border p-1">
+            {[
+              { value: "grid", icon: Grid3X3 },
+              { value: "list", icon: List },
+              { value: "timeline", icon: Calendar },
+            ].map((v) => (
+              <button
+                key={v.value}
+                onClick={() => setView(v.value as typeof view)}
+                className={cn(
+                  "rounded-md p-2 transition-colors",
+                  view === v.value ? "bg-primary text-primary-foreground" : "hover:bg-muted",
+                )}
+              >
+                <v.icon className="h-4 w-4" />
+              </button>
+            ))}
+          </div>
+        </div>
 
-      {/* Session Detail Dialog */}
-      <SessionDetailDialog session={showSessionDetail} onClose={() => setShowSessionDetail(null)} />
+        {/* Sessions Display */}
+        <AnimatePresence mode="wait">
+          {view === "grid" && (
+            <motion.div
+              key="grid"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="grid gap-4 md:grid-cols-2 lg:grid-cols-3"
+            >
+              {filteredSessions.map((session, i) => (
+                <SessionCard key={session.id} session={session} index={i} onClick={() => setShowSessionDetail(session)} />
+              ))}
+            </motion.div>
+          )}
+
+          {view === "list" && (
+            <motion.div
+              key="list"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="space-y-2"
+            >
+              {filteredSessions.map((session, i) => (
+                <SessionListItem
+                  key={session.id}
+                  session={session}
+                  index={i}
+                  onClick={() => setShowSessionDetail(session)}
+                />
+              ))}
+            </motion.div>
+          )}
+
+          {view === "timeline" && (
+            <motion.div key="timeline" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+              <TimelineView sessions={filteredSessions} onSessionClick={setShowSessionDetail} />
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {filteredSessions.length === 0 && (
+          <div className="flex flex-col items-center justify-center rounded-xl border border-dashed py-16">
+            <Calendar className="h-12 w-12 text-muted-foreground/50" />
+            <h3 className="mt-4 text-lg font-semibold">No sessions found</h3>
+            <p className="text-muted-foreground">Try adjusting your filters or create a new session.</p>
+            <Button onClick={() => setShowCreateDialog(true)} className="mt-4 gap-2">
+              <Plus className="h-4 w-4" />
+              Create Session
+            </Button>
+          </div>
+        )}
+
+        {/* Create Session Dialog */}
+        <CreateSessionDialog
+          open={showCreateDialog}
+          onOpenChange={setShowCreateDialog}
+          step={createStep}
+          setStep={setCreateStep}
+        />
+
+        {/* Session Detail Dialog */}
+        <SessionDetailDialog session={showSessionDetail} onClose={() => setShowSessionDetail(null)} />
       </div>
+
+      {/* Scheduling Agent Chat */}
+      <SchedulingAgentChat />
     </div>
   )
 }
