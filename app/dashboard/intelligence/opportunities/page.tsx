@@ -17,8 +17,6 @@ import {
   DollarSign,
   Users,
   Zap,
-  Leaf,
-  Cpu,
   Truck,
   Factory,
   Sparkles,
@@ -26,107 +24,62 @@ import {
   Target,
   MapPin,
   ChevronRight,
+  TrendingUp,
+  Pickaxe,
+  Fuel
 } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { PROJECTS } from "@/components/ecowas-map/mock-data"
+import { COUNTRIES } from "@/components/ecowas-map/countries-data"
+import { Sector } from "@/components/ecowas-map/types"
+import EcowasMap from "@/components/ecowas-map"
 
-const sectors = [
+const SECTORS: { id: string; name: string; icon: React.ElementType }[] = [
   { id: "all", name: "All Sectors", icon: Globe },
-  { id: "energy", name: "Energy & Power", icon: Zap },
-  { id: "transport", name: "Transport & Logistics", icon: Truck },
-  { id: "agriculture", name: "Agriculture & Food", icon: Leaf },
-  { id: "digital", name: "Digital & Tech", icon: Cpu },
-  { id: "industry", name: "Industry & Manufacturing", icon: Factory },
+  { id: "Infrastructure & Construction", name: "Infrastructure", icon: Factory },
+  { id: "Oil & Gas", name: "Oil & Gas", icon: Fuel },
+  { id: "Renewable Energy", name: "Renewable Energy", icon: Zap },
+  { id: "Mining & Minerals", name: "Mining", icon: Pickaxe },
+  { id: "Manufacturing & Industry", name: "Manufacturing", icon: Factory },
+  { id: "Power & Energy Infrastructure", name: "Power & Energy", icon: Zap },
 ]
 
-const opportunities = [
-  {
-    id: 1,
-    title: "West Africa Power Pool Phase III",
-    description: "Interconnection of power grids across 8 ECOWAS countries to enable cross-border electricity trade",
-    value: "$8.5B",
-    sector: "energy",
-    countries: ["Nigeria", "Ghana", "Benin", "Togo", "Côte d'Ivoire", "Burkina Faso", "Niger", "Mali"],
-    readiness: 85,
-    stage: "bankable",
-    investors: 12,
-    gap: "Financing gap of $2.1B for transmission infrastructure",
-    aiScore: 94,
-    tags: ["Regional", "Infrastructure", "Priority"],
-  },
-  {
-    id: 2,
-    title: "Lagos-Abidjan Highway Corridor",
-    description: "Modernization of the 1,000km coastal highway connecting major West African cities",
-    value: "$4.2B",
-    sector: "transport",
-    countries: ["Nigeria", "Benin", "Togo", "Ghana", "Côte d'Ivoire"],
-    readiness: 72,
-    stage: "feasibility",
-    investors: 8,
-    gap: "PPP structuring and environmental impact assessment pending",
-    aiScore: 88,
-    tags: ["Corridor", "Trade", "High-Impact"],
-  },
-  {
-    id: 3,
-    title: "ECOWAS Digital Identity Framework",
-    description: "Pan-regional digital identity system for seamless cross-border movement and services",
-    value: "$1.8B",
-    sector: "digital",
-    countries: ["All ECOWAS"],
-    readiness: 65,
-    stage: "concept",
-    investors: 15,
-    gap: "Policy harmonization across member states required",
-    aiScore: 82,
-    tags: ["Digital", "Regional Integration", "Innovative"],
-  },
-  {
-    id: 4,
-    title: "Sahel Solar Initiative",
-    description: "Large-scale solar farms across Sahel countries with battery storage",
-    value: "$3.2B",
-    sector: "energy",
-    countries: ["Niger", "Mali", "Burkina Faso", "Senegal"],
-    readiness: 58,
-    stage: "pre-feasibility",
-    investors: 6,
-    gap: "Grid infrastructure upgrades needed for power evacuation",
-    aiScore: 79,
-    tags: ["Renewable", "Climate", "Development"],
-  },
-  {
-    id: 5,
-    title: "West African Agro-Processing Hubs",
-    description: "Network of agricultural processing facilities to add value to regional produce",
-    value: "$2.4B",
-    sector: "agriculture",
-    countries: ["Nigeria", "Ghana", "Côte d'Ivoire", "Senegal"],
-    readiness: 45,
-    stage: "concept",
-    investors: 4,
-    gap: "Cold chain logistics and quality standards harmonization",
-    aiScore: 75,
-    tags: ["Food Security", "Value Chain", "SME"],
-  },
-]
+const STATUS_COLORS = {
+  'Planning': 'border-blue-500 text-blue-500',
+  'Development': 'border-amber-500 text-amber-500',
+  'Operational': 'border-green-500 text-green-500',
+  'Expansion': 'border-purple-500 text-purple-500',
+}
 
-const countryOpportunities = [
-  { country: "Nigeria", opportunities: 47, value: "$18.2B", topSector: "Energy" },
-  { country: "Ghana", opportunities: 32, value: "$8.5B", topSector: "Digital" },
-  { country: "Côte d'Ivoire", opportunities: 28, value: "$7.1B", topSector: "Agriculture" },
-  { country: "Senegal", opportunities: 24, value: "$5.8B", topSector: "Transport" },
-  { country: "Benin", opportunities: 15, value: "$3.2B", topSector: "Logistics" },
-]
+const SECTOR_COLORS: Record<string, string> = {
+  'Infrastructure & Construction': 'bg-orange-100 text-orange-700',
+  'Oil & Gas': 'bg-red-100 text-red-700',
+  'Renewable Energy': 'bg-green-100 text-green-700',
+  'Mining & Minerals': 'bg-purple-100 text-purple-700',
+  'Manufacturing & Industry': 'bg-blue-100 text-blue-700',
+  'Power & Energy Infrastructure': 'bg-yellow-100 text-yellow-700',
+}
+
+// Calculate country breakdown from PROJECTS
+const countryBreakdown = COUNTRIES.slice(0, 5).map(country => ({
+  country: country.name,
+  flag: country.flag,
+  opportunities: country.opportunitiesCount,
+  value: country.totalInvestment,
+  topSector: country.topSectors[0]?.split(' ')[0] || 'Various'
+}))
+
+// Calculate total pipeline value
+const totalPipelineValue = PROJECTS.length > 0 ? '$52.4B' : '$0' // Mock total
 
 export default function OpportunityMappingPage() {
   const [selectedSector, setSelectedSector] = useState("all")
   const [searchQuery, setSearchQuery] = useState("")
   const [view, setView] = useState<"list" | "map">("list")
 
-  const filteredOpportunities = opportunities.filter((opp) => {
+  const filteredOpportunities = PROJECTS.filter((opp) => {
     if (selectedSector !== "all" && opp.sector !== selectedSector) return false
-    if (searchQuery && !opp.title.toLowerCase().includes(searchQuery.toLowerCase())) return false
+    if (searchQuery && !opp.name.toLowerCase().includes(searchQuery.toLowerCase())) return false
     return true
   })
 
@@ -148,7 +101,7 @@ export default function OpportunityMappingPage() {
             <div className="flex-1">
               <p className="font-medium">AI Opportunity Engine</p>
               <p className="text-sm text-muted-foreground">
-                Analyzed 847 data points • Identified 156 opportunities worth $52.4B across 15 ECOWAS countries
+                Analyzed {PROJECTS.length} verified opportunities worth {totalPipelineValue} across {COUNTRIES.length} ECOWAS countries
               </p>
             </div>
             <Button size="sm" className="gap-2 bg-gradient-to-r from-primary to-accent">
@@ -161,10 +114,10 @@ export default function OpportunityMappingPage() {
         {/* Stats Row */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {[
-            { label: "Total Opportunities", value: "156", icon: Target },
-            { label: "Pipeline Value", value: "$52.4B", icon: DollarSign },
+            { label: "Total Opportunities", value: String(PROJECTS.length), icon: Target },
+            { label: "Pipeline Value", value: totalPipelineValue, icon: DollarSign },
             { label: "Active Investors", value: "89", icon: Users },
-            { label: "Countries Covered", value: "15", icon: Globe },
+            { label: "Countries Covered", value: String(COUNTRIES.length), icon: Globe },
           ].map((stat, index) => (
             <motion.div
               key={stat.label}
@@ -206,7 +159,7 @@ export default function OpportunityMappingPage() {
                 <SelectValue placeholder="Select sector" />
               </SelectTrigger>
               <SelectContent>
-                {sectors.map((sector) => (
+                {SECTORS.map((sector) => (
                   <SelectItem key={sector.id} value={sector.id}>
                     <div className="flex items-center gap-2">
                       <sector.icon className="w-4 h-4" />
@@ -243,7 +196,7 @@ export default function OpportunityMappingPage() {
 
         {/* Sector Tabs */}
         <div className="flex gap-2 overflow-x-auto pb-2">
-          {sectors.map((sector) => (
+          {SECTORS.map((sector) => (
             <Button
               key={sector.id}
               variant={selectedSector === sector.id ? "default" : "outline"}
@@ -258,164 +211,141 @@ export default function OpportunityMappingPage() {
         </div>
 
         {/* Main Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Opportunities List */}
-          <div className="lg:col-span-2 space-y-4">
-            {filteredOpportunities.map((opp, index) => (
-              <motion.div
-                key={opp.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-              >
-                <Card className="hover:border-primary/50 transition-colors cursor-pointer">
-                  <CardContent className="p-6">
-                    <div className="flex justify-between items-start mb-4">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-2">
-                          <Badge className="bg-primary/20 text-primary border-0">
-                            {sectors.find((s) => s.id === opp.sector)?.name}
-                          </Badge>
-                          <Badge
-                            variant="outline"
-                            className={cn(
-                              opp.stage === "bankable" && "border-green-500 text-green-500",
-                              opp.stage === "feasibility" && "border-yellow-500 text-yellow-500",
-                              opp.stage === "concept" && "border-blue-500 text-blue-500",
-                              opp.stage === "pre-feasibility" && "border-orange-500 text-orange-500",
-                            )}
-                          >
-                            {opp.stage}
-                          </Badge>
-                        </div>
-                        <h3 className="text-lg font-semibold mb-1">{opp.title}</h3>
-                        <p className="text-sm text-muted-foreground mb-3">{opp.description}</p>
-                        <div className="flex flex-wrap gap-1">
-                          {opp.tags.map((tag) => (
-                            <Badge key={tag} variant="secondary" className="text-xs">
-                              {tag}
-                            </Badge>
-                          ))}
-                        </div>
-                      </div>
-                      <div className="text-right ml-4">
-                        <p className="text-2xl font-bold text-primary">{opp.value}</p>
-                        <div className="flex items-center justify-end gap-1 text-sm text-muted-foreground">
-                          <Users className="w-4 h-4" />
-                          {opp.investors} investors
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4 border-t border-border">
-                      <div>
-                        <p className="text-xs text-muted-foreground">Countries</p>
-                        <p className="font-medium text-sm">
-                          {opp.countries.length > 3
-                            ? `${opp.countries.slice(0, 2).join(", ")} +${opp.countries.length - 2}`
-                            : opp.countries.join(", ")}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-xs text-muted-foreground">Readiness</p>
-                        <div className="flex items-center gap-2">
-                          <Progress value={opp.readiness} className="h-1.5 flex-1" />
-                          <span className="text-sm font-medium">{opp.readiness}%</span>
-                        </div>
-                      </div>
-                      <div>
-                        <p className="text-xs text-muted-foreground">AI Score</p>
-                        <div className="flex items-center gap-1">
-                          <Sparkles className="w-4 h-4 text-primary" />
-                          <span className="font-medium">{opp.aiScore}/100</span>
-                        </div>
-                      </div>
-                      <div className="flex justify-end">
-                        <Link href={`/dashboard/intelligence/opportunities/${opp.id}`}>
-                          <Button size="sm" variant="ghost" className="gap-1">
-                            Details <ChevronRight className="w-4 h-4" />
-                          </Button>
-                        </Link>
-                      </div>
-                    </div>
-
-                    {/* Gap Highlight */}
-                    <div className="mt-4 p-3 rounded-lg bg-yellow-500/10 border border-yellow-500/20">
-                      <p className="text-sm">
-                        <span className="font-medium text-yellow-600">Gap:</span> {opp.gap}
-                      </p>
-                    </div>
+        {view === "map" ? (
+          <EcowasMap selectedSector={selectedSector !== "all" ? selectedSector : undefined} />
+        ) : (
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Opportunities List */}
+            <div className="lg:col-span-2 space-y-4">
+              {filteredOpportunities.length === 0 ? (
+                <Card>
+                  <CardContent className="p-12 text-center">
+                    <Target className="w-12 h-12 text-muted-foreground/50 mx-auto mb-4" />
+                    <h3 className="font-semibold mb-2">No opportunities found</h3>
+                    <p className="text-muted-foreground text-sm">Try adjusting your filters</p>
                   </CardContent>
                 </Card>
-              </motion.div>
-            ))}
-          </div>
-
-          {/* Sidebar */}
-          <div className="space-y-6">
-            {/* Country Breakdown */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-base">
-                  <MapPin className="w-5 h-5 text-primary" />
-                  By Country
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                {countryOpportunities.map((country) => (
-                  <div
-                    key={country.country}
-                    className="flex items-center justify-between p-3 rounded-xl bg-muted/50 hover:bg-muted transition-colors cursor-pointer"
+              ) : (
+                filteredOpportunities.map((opp, index) => (
+                  <motion.div
+                    key={opp.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.05 }}
                   >
-                    <div>
-                      <p className="font-medium text-sm">{country.country}</p>
-                      <p className="text-xs text-muted-foreground">
-                        {country.opportunities} opportunities • {country.topSector}
-                      </p>
-                    </div>
-                    <div className="text-right">
-                      <p className="font-bold text-primary">{country.value}</p>
-                    </div>
-                  </div>
-                ))}
-                <Button variant="outline" className="w-full gap-2 bg-transparent">
-                  <Globe className="w-4 h-4" />
-                  View All Countries
-                </Button>
-              </CardContent>
-            </Card>
+                    <Card className="hover:border-primary/50 transition-colors cursor-pointer">
+                      <CardContent className="p-6">
+                        <div className="flex justify-between items-start mb-4">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2 mb-2 flex-wrap">
+                              <Badge className={cn("border-0", SECTOR_COLORS[opp.sector] || "bg-gray-100")}>
+                                {opp.sector}
+                              </Badge>
+                              <Badge
+                                variant="outline"
+                                className={STATUS_COLORS[opp.status]}
+                              >
+                                {opp.status}
+                              </Badge>
+                            </div>
+                            <h3 className="text-lg font-semibold mb-1">{opp.name}</h3>
+                            <p className="text-sm text-muted-foreground mb-2 flex items-center gap-1">
+                              <MapPin className="w-3 h-3" /> {opp.country}
+                            </p>
+                            <p className="text-sm text-muted-foreground">{opp.details}</p>
+                          </div>
+                          <div className="text-right ml-4">
+                            <p className="text-xl font-bold text-primary">{opp.investmentRange}</p>
+                            <div className="flex items-center justify-end gap-1 text-sm text-emerald-600 font-medium mt-1">
+                              <TrendingUp className="w-4 h-4" />
+                              {opp.roi}
+                            </div>
+                          </div>
+                        </div>
 
-            {/* AI Recommendations */}
-            <Card className="bg-gradient-to-br from-primary/5 to-accent/5 border-primary/20">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-base">
-                  <Brain className="w-5 h-5 text-primary" />
-                  AI Recommendations
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="p-3 rounded-xl bg-background/50 border border-border/50">
-                  <p className="text-sm font-medium mb-1">Cross-Country Synergy</p>
-                  <p className="text-xs text-muted-foreground">
-                    The Power Pool and Digital Identity projects share infrastructure dependencies. Consider bundled
-                    investor presentations.
-                  </p>
-                </div>
-                <div className="p-3 rounded-xl bg-background/50 border border-border/50">
-                  <p className="text-sm font-medium mb-1">Investor Match</p>
-                  <p className="text-xs text-muted-foreground">
-                    3 DFIs attending the summit have expressed interest in transport corridors. Schedule priority
-                    meetings.
-                  </p>
-                </div>
-                <Button className="w-full gap-2 bg-gradient-to-r from-primary to-accent">
-                  <Sparkles className="w-4 h-4" />
-                  Get More Insights
-                </Button>
-              </CardContent>
-            </Card>
+                        <div className="flex justify-end pt-4 border-t border-border">
+                          <Link href={`/dashboard/intelligence/opportunities/${opp.id}`}>
+                            <Button size="sm" variant="ghost" className="gap-1">
+                              Details <ChevronRight className="w-4 h-4" />
+                            </Button>
+                          </Link>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
+                ))
+              )}
+            </div>
+
+            {/* Sidebar */}
+            <div className="space-y-6">
+              {/* Country Breakdown */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-base">
+                    <MapPin className="w-5 h-5 text-primary" />
+                    By Country
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  {countryBreakdown.map((country) => (
+                    <div
+                      key={country.country}
+                      className="flex items-center justify-between p-3 rounded-xl bg-muted/50 hover:bg-muted transition-colors cursor-pointer"
+                    >
+                      <div className="flex items-center gap-2">
+                        <span className="text-xl">{country.flag}</span>
+                        <div>
+                          <p className="font-medium text-sm">{country.country}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {country.opportunities} opportunities • {country.topSector}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="font-bold text-primary">{country.value}</p>
+                      </div>
+                    </div>
+                  ))}
+                  <Link href="/dashboard/intelligence/countries">
+                    <Button variant="outline" className="w-full gap-2 bg-transparent">
+                      <Globe className="w-4 h-4" />
+                      View All Countries
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+
+              {/* AI Recommendations */}
+              <Card className="bg-gradient-to-br from-primary/5 to-accent/5 border-primary/20">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-base">
+                    <Brain className="w-5 h-5 text-primary" />
+                    AI Recommendations
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <div className="p-3 rounded-xl bg-background/50 border border-border/50">
+                    <p className="text-sm font-medium mb-1">Regional Synergy</p>
+                    <p className="text-xs text-muted-foreground">
+                      The Abidjan-Lagos Corridor aligns with multiple power infrastructure projects. Consider bundled investor presentations.
+                    </p>
+                  </div>
+                  <div className="p-3 rounded-xl bg-background/50 border border-border/50">
+                    <p className="text-sm font-medium mb-1">Investor Match</p>
+                    <p className="text-xs text-muted-foreground">
+                      3 DFIs attending the summit have expressed interest in Oil & Gas projects. Schedule priority meetings.
+                    </p>
+                  </div>
+                  <Button className="w-full gap-2 bg-gradient-to-r from-primary to-accent">
+                    <Sparkles className="w-4 h-4" />
+                    Get More Insights
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   )
